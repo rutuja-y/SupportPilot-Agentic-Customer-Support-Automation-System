@@ -40,6 +40,7 @@ def get_groq_client():
     return Groq(api_key=os.getenv("GROQ_API_KEY"))
 
 
+
 def classify_request(state: SupportState) -> dict:
     """Classify the customer's question into a known support category."""
     client = get_groq_client()
@@ -51,23 +52,41 @@ def classify_request(state: SupportState) -> dict:
                 "role": "system",
                 "content": (
                     "Classify the customer's support question into exactly "
-                    "one category: shipping, returns, warranty, "
-                    "troubleshooting, or other. "
-                    "Return only the category word. "
-                    "If uncertain or unrelated, return other."
+                    "one of these categories:\n"
+                    "- shipping: delivery times, tracking, delayed orders\n"
+                    "- returns: return eligibility, return conditions, refunds\n"
+                    "- warranty: warranty coverage, claims, exclusions\n"
+                    "- troubleshooting: device problems and repair steps\n"
+                    "- other: unrelated questions or no suitable category\n\n"
+                    "Choose the category that best matches the customer's "
+                    "main intent. For questions covering multiple topics, "
+                    "choose the primary topic. "
+                    "Return only one category word, with no explanation."
                 ),
             },
             {"role": "user", "content": state["query"]},
         ],
         temperature=0,
-        max_tokens=10,
+        max_tokens=100,
+    )
+    
+
+    response_text = (
+        response.choices[0].message.content or ""
+    ).strip().lower()
+    
+
+    # Accept the category word even if the model adds extra text.
+    category = next(
+        (
+            word
+            for word in response_text.replace(":", " ").split()
+            if word.strip(".,!\"'`") in VALID_CATEGORIES
+        ),
+        "other",
     )
 
-    category = (response.choices[0].message.content or "")
-    category = category.strip().lower().strip(" .,!\"'")
-
-    if category not in VALID_CATEGORIES:
-        category = "other"
+    category = category.strip(".,!\"'`")
 
     return {"category": category}
 
