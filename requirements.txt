@@ -1,0 +1,17 @@
+﻿# Application
+fastapi==0.161.1
+uvicorn==0.54.0
+streamlit==1.66.1
+
+# AI and retrieval
+langgraph==1.2.16
+groq==1.7.0
+chromadb==1.5.9
+sentence-transformers==6.2.0
+
+# Configuration
+python-dotenv==1.2.4
+
+# Testing
+pytest==9.1.1
+httpx==0.28.1
