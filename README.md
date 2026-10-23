@@ -13,6 +13,20 @@ The project demonstrates how LLMs, semantic search, APIs, databases, and automat
 - **Ticket creation:** Requests explicit user confirmation before creating a support ticket.
 - **Evaluation:** Includes a 30-case evaluation dataset and automated tests for application behavior and retrieval.
 
+## Demo Screenshots
+
+### 1. Knowledge Base — Return Policy
+
+![Return Policy](screenshots/return_policy.png)
+
+### 2. Order Status Lookup
+
+![Order Lookup](screenshots/order_lookup.png)
+
+### 3. Support Ticket Creation
+
+![Ticket Creation](screenshots/ticket_creation.png)
+
 ## Architecture
 
 ```mermaid
