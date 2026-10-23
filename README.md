@@ -15,38 +15,31 @@ The project demonstrates how LLMs, semantic search, APIs, databases, and automat
 
 ## Architecture
 
-```text
-             Customer
-                |
-                v
-       Streamlit Interface
-                |
-                v
-          FastAPI Backend
-                |
-                v
-       LangGraph Workflow
-                |
-        +-------+--------+
-        |                |
-        v                v
-   Groq LLM         ChromaDB
-        |          Semantic Search
-        |                |
-        +-------+--------+
-                |
-                v
-       Support Response
-                |
-        +-------+--------+
-        |                |
-        v                v
-   SQLite Database   Ticket Creation
-   Order / Ticket    User Confirmation
-       Records
+```mermaid
+flowchart TD
+    A[Customer] --> B[Streamlit Interface]
+    B --> C[FastAPI Backend]
+    C --> D[LangGraph Workflow]
+
+    D --> E[Request Classification]
+    E --> F[Knowledge Retrieval]
+    F --> G[ChromaDB Vector Store]
+    G --> H[Relevant Support Context]
+    H --> I[Groq LLM]
+    I --> J[Support Response]
+
+    D --> K[Order Lookup]
+    K --> L[(SQLite Database)]
+
+    D --> M[Ticket Creation]
+    M --> N{User Confirmation}
+    N -->|Confirmed| L
+    N -->|Not confirmed| O[No Ticket Created]
+
+    J --> B
 ```
 
-_Conceptual overview of the main components and workflow._
+_Conceptual architecture of SupportPilot. The diagram summarizes the main components and intended workflow; individual execution paths depend on the implementation._
 
 ## Tech Stack
 
